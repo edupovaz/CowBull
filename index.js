@@ -11,11 +11,29 @@ server.get('/', (req,res) => {
 })
 
 server.post('/api/farm', (req,res) =>{
-    Farm.add(req.body).then(Farm => {
+    Farm.addFarm(req.body).then(Farm => {
         res.status(200).json(Farm)
     })
     .catch(error => {
         res.status(500).json({message: "cannot add farm"})
+    })
+})
+
+server.post('/api/fridge', (req,res) => {
+    Farm.addFridge(req.body).then(Fridge => {
+        res.status(200).json(Fridge)
+    })
+    .catch(error => {
+        res.status(500).json({message: "cannot add fridge"})
+    })
+})
+
+server.get('/api/fridge', (req, res) => {
+    Farm.findFridge().then(fridge => {
+        res.status(200).json(fridge)
+    })
+    .catch(error => {
+        res.status(500).json({message: "Unable to retrive farm"})
     })
 })
 
