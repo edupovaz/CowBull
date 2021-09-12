@@ -19,6 +19,15 @@ server.post('/api/farm', (req,res) =>{
     })
 })
 
+server.get('/api/farm', (req, res) => {
+    Farm.find().then(farm => {
+        res.status(200).json(farm)
+    })
+    .catch(error => {
+        res.status(500).json({message: "Unable to retrive farm"})
+    })
+})
+
 server.post('/api/fridge', (req,res) => {
     Farm.addFridge(req.body).then(Fridge => {
         res.status(200).json(Fridge)
@@ -37,12 +46,70 @@ server.get('/api/fridge', (req, res) => {
     })
 })
 
-server.get('/api/farm', (req, res) => {
-    Farm.find().then(farm => {
-        res.status(200).json(farm)
+server.get('/api/gado', (req,res) =>{
+    Farm.findGado().then(gado => {
+        res.status(200).json(gado)
+    })
+    .catch(error => {
+        res.status(500).json({message: "Unable to retrive gado"})
+    })
+})
+
+server.post('/api/gado', (req,res) =>{
+    Farm.addGado(req.body).then(gado => {
+        res.status(200).json(gado)
     })
     .catch(error => {
         res.status(500).json({message: "Unable to retrive farm"})
+    })
+})
+
+server.get('/api/gado/:id', (req,res) =>{
+    const { id } = req.params
+
+    Farm.findGadoById(id)
+    .then(gado =>{
+        if(gado){
+            res.status(200).json(gado)
+        }else{
+            res.status(404).json({message: "Record not found"})
+        }
+    })
+    .catch(error => {
+        res.status(500).json({message: "Unable to perform operation"})
+    })
+})
+
+server.delete('/api/gado/:id', (req,res) =>{
+    const {id} = req.params
+
+    Farm.remove(id)
+    .then(count =>{
+        if(count > 0){
+            res.status(200).json({message: "successfully deleted"})
+        }else{
+            res.status(404).json({message: "Record not found"})
+        }
+    })
+    .catch(error => {
+        res.status(500).json({message: "Unable to perform operation"})
+    })
+})
+
+server.patch('/api/gado/:id', (req,res) =>{
+    const { id } = req.params
+    const changes = req.body
+
+    Farm.update(id,changes)
+    .then(gado => {
+        if(gado){
+            res.status(200).json(gado)
+        }else{
+            res.status(404).json({message:"Record not found"})
+        }
+    })
+    .catch(error => {
+        res.status(500).json({message:"Unable to perform operation"})
     })
 })
 
